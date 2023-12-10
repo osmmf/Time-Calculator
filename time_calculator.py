@@ -15,30 +15,28 @@ def add_time(start_time, duration, start_day=None):
 
     new_am_pm = "AM" if new_hour < 12 else "PM"
 
-    if new_hour > 12:
-        new_hour -= 12
-    elif new_hour == 0:
-        new_hour = 12
+    if new_hour >= 12:
+        new_am_pm = "PM" if new_hour >= 12 else "AM"
+        new_hour = new_hour % 12
+        if new_hour == 0:
+            new_hour = 12
 
     new_time = f"{new_hour:02d}:{new_minute:02d} {new_am_pm}"
-
-    # Handle days later
+    
     days_later = total_minutes // 1440
-    if days_later == 1:
-        new_time += " (next day)"
-    elif days_later > 1:
-        new_time += f" ({days_later} days later)"
-
-    # Handle starting day of the week if provided
+    
     if start_day:
         start_day = start_day.capitalize()
         days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         start_index = days_of_week.index(start_day)
         new_day_index = (start_index + days_later) % 7
         new_day = days_of_week[new_day_index]
-        if days_later == 1:
-            new_time += f", {new_day} (next day)"
-        elif days_later > 1:
-            new_time += f", {new_day} ({days_later} days later)"
 
-    return new_time 
+        new_time += f", {new_day}"
+
+    if days_later == 1:
+        new_time += " (next day)"
+    elif days_later > 1:
+        new_time += f" ({days_later} days later)"
+
+    return new_time
