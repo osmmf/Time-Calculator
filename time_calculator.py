@@ -18,6 +18,7 @@ def add_time(start_time, duration, start_day=None):
     if new_hour == 0:
         new_hour = 12
 
+    
     new_time = f"{new_hour:02d}:{new_minute:02d} {new_am_pm}"
     
     days_later = total_minutes // 1440
