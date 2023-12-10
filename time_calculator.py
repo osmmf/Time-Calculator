@@ -15,11 +15,8 @@ def add_time(start_time, duration, start_day=None):
 
     new_am_pm = "AM" if new_hour < 12 else "PM"
 
-    if new_hour >= 12:
-        new_am_pm = "PM" if new_hour >= 12 else "AM"
-        new_hour = new_hour % 12
-        if new_hour == 0:
-            new_hour = 12
+    if new_hour == 0:
+        new_hour = 12
 
     new_time = f"{new_hour:02d}:{new_minute:02d} {new_am_pm}"
     
