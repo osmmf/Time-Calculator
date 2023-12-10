@@ -30,10 +30,10 @@ def add_time(start_time, duration, start_day=None):
 
     if start_day:
         start_day = start_day.capitalize()
-        days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", ""]
+        days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         start_index = days_of_week.index(start_day)
         new_day_index = (start_index + days_later) % 7
         new_day = days_of_week[new_day_index]
-        new_time += f", {new_day}"
+        new_time += f", {new_day} ({days_later} days later)"  # Include day information here
 
     return new_time
