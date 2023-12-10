@@ -39,5 +39,5 @@ def add_time(current_time, duration, day=None):
     reset_week = week[current_day_index:] + week[:current_day_index]
     next_day_index = (days_later % 7) if days_later > len(reset_week) else days_later
     days_name = f", {reset_week[next_day_index]}"
-
+  
   return f"{next_time_hours}:{str(next_time_minutes).zfill(2)} {next_time_format}{days_name}{days_note}"
