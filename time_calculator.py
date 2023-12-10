@@ -1,40 +1,43 @@
-def add_time(start_time, duration, start_day=None):
-    start_time_parts = start_time.split()
-    start_hour, start_minute = map(int, start_time_parts[0].split(':'))
-    am_pm = start_time_parts[1]
+def add_time(current_time, duration, day=None):
 
-    duration_hours, duration_minutes = map(int, duration.split(':'))
+  # define helper variable
+  days_note = ""
+  days_name = ""
+  week = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+  changing_format = {"AM":"PM", "PM":"AM"}
 
-    if am_pm == "PM":
-        start_hour += 12
+  # get time detail (hour, minute, and format) for each time params
+  current_time_hour = int(current_time.split(" ")[0].split(":")[0])
+  current_time_format = current_time.split(" ")[1]
+  duration_hour = int(duration.split(":")[0])
+  next_time_minutes = int(current_time.split(" ")[0].split(":")[1]) + int(duration.split(":")[1])
 
-    total_minutes = start_hour * 60 + start_minute + duration_hours * 60 + duration_minutes
+  # check if minute more than 60 and convert to hour if minute > 60
+  if next_time_minutes >= 60:
+    next_time_minutes -= 60
+    duration_hour += 1
 
-    new_hour = total_minutes // 60 % 24
-    new_minute = total_minutes % 60
+  # calcutate next time hour, format and total days
+  count_hours = (current_time_hour + duration_hour) % 12
+  count_days = (current_time_hour + duration_hour) // 24
+  count_format = (current_time_hour + duration_hour) % 24
+  
+  days_later = (count_days + 1) if (current_time_hour + duration_hour) >= 12 and current_time_format == "PM" else count_days
+  next_time_hours = count_hours if count_hours != 0 else 12
+  next_time_format = changing_format[current_time_format] if count_format >= 12 else current_time_format
 
-    new_am_pm = "AM" if new_hour < 12 else "PM"
+  # set hour to 0 if current time format == PM and current time hour + duration hour == 12 
+  next_time_hours = 0 if (current_time_hour + duration_hour) == 12 and current_time_format == "PM" else next_time_hours
+  
+  # set days later note
+  if days_later > 0:
+    days_note = " (next day)" if days_later == 1 else f" ({days_later} days later)"
 
-    if new_hour == 0:
-        new_hour = 12
+  # get current day
+  if day:
+    current_day_index = week.index(day.capitalize())
+    reset_week = week[current_day_index:] + week[:current_day_index]
+    next_day_index = (days_later % 7) if days_later > len(reset_week) else days_later
+    days_name = f", {reset_week[next_day_index]}"
 
-    
-    new_time = f"{new_hour:02d}:{new_minute:02d} {new_am_pm}"
-    
-    days_later = total_minutes // 1440
-    
-    if start_day:
-        start_day = start_day.capitalize()
-        days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        start_index = days_of_week.index(start_day)
-        new_day_index = (start_index + days_later) % 7
-        new_day = days_of_week[new_day_index]
-
-        new_time += f", {new_day}"
-
-    if days_later == 1:
-        new_time += " (next day)"
-    elif days_later > 1:
-        new_time += f" ({days_later} days later)"
-
-    return new_time
+  return f"{next_time_hours}:{str(next_time_minutes).zfill(2)} {next_time_format}{days_name}{days_note}"
