@@ -1,4 +1,4 @@
-# Time Addition Challenge
+# Time Calculator
 
 This project is part of the freeCodeCamp challenge to create a Python program that adds a specified duration to a given start time, considering both 12-hour clock format and an optional starting day of the week.
 
